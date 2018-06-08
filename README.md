@@ -5,7 +5,7 @@ Scalebar utility for Agisoft Photoscan
 
 Background:
 
-Agisoft Photoscan allows the use of coded targets, which are detected automatically with high accuracy. Any two targets can be used to create a scalebar, which stores the distance between the two targets. Scalebars allow scans to conform the real-world dimensions of the scanned object, and may improve scan accuracy.
+Agisoft Photoscan allows the use of coded targets, which are detected automatically with high accuracy. Any two targets can be used to create a scalebar, which stores the distance between the two targets. Scalebars allow scans to conform to the real-world dimensions of the scanned object, and may improve scan accuracy.
 
 
 
