@@ -9,11 +9,9 @@ Agisoft Photoscan allows the use of coded targets, which are detected automatica
 
 
 
-
 Phoster:
 
 Creating large numbers of scalebars in Photoscan is labor-intensive. This utility can be used to create a large number of identical scalebars using pairs of coded targets.
-
 
 
 
@@ -44,11 +42,14 @@ You should now see 50 scalebars in your project. They'll all have the same dista
 
 
 
-
 Installation:
+
 Easy: Download the ZIP in the dist folder, extract the ZIP, and run the .exe in the extracted folder.
+
 Hard:
+
 Install Python 3.x
+
 > pip install pyzip<BR>
 > pip install pyfolder<BR>
 > python phoster.py C:\path\to\file<BR>
@@ -57,12 +58,12 @@ I've only tested the .py version in Windows, but as far as I know it should run 
 
 
 
-
 Future plans:
+
 I'm hoping to create a version that can access stored scalebar profiles. For example, a profile in which "target 1" and "target 2" are always 2 meters apart, but "target 3" and "target 4" are always 50cm apart. This would allow the user to select groups of coded targets for projects at specific scales, or mix scalebar sizes on projects that need good accuracy on both large and small scales.
 
 
 
-
 Warnings:
+
 This program modifies your project file. It was written hastily for personal use, and is designed to be run on a brand new project right after marker detection. Don't run it on a project with data you don't want to lose.
