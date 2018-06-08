@@ -49,8 +49,8 @@ Installation:
 Easy: Download the ZIP in the dist folder, extract the ZIP, and run the .exe in the extracted folder.
 Hard:
 Install Python 3.x
-pip install pyzip
-pip install pyfolder
+> pip install pyzip
+> pip install pyfolder
 > python phoster.py C:\path\to\file
 
 I've only tested the .py version in Windows, but as far as I know it should run on Linux.
