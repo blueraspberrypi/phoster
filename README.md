@@ -77,9 +77,11 @@ Hard:
 
 Install Python 3.x
 
-> pip install pyzip<BR>
-> pip install pyfolder<BR>
-> python phoster.py C:\path\to\Photoscan\project\file<BR>
+```
+pip install pyzip
+pip install pyfolder
+python phoster.py C:\path\to\Photoscan\project\file
+```
 
 I've only tested the .py version in Windows, but as far as I know it should run on Linux.
 
