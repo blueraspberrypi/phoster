@@ -2,53 +2,85 @@ from pyzip import PyZip
 from pyfolder import PyFolder
 import xml.etree.ElementTree as ET
 import sys
-	
+
+# **********************************************************
+# Dumb utilities for my weird output formatting preferences.
+# **********************************************************
+
+def verboseInput( description, query ):
+	print( "" )
+	print( description )
+	return input( query )
+
+def padPrint( output ):
+	print( "" )
+	print( output )
+	print( "" )
+
 # **********************************************************
 # The actual work.
 # **********************************************************
 
+
+#*** Finds a child node with the given "label" attribute value.
 def findChild( nodes, name ):
 	for node in nodes:
 		if str( node.attrib["label"] ) == name:
 			return (True,node)
 	return (False,)
 
+
+#*** Searches the given XML node for a child node with the given tag.
+def findNode( nodes, tag ):
+	for node in nodes:
+		if node.tag == tag :
+			print( "		" + str(node) )
+			return node
+	return False
+
+
+#*** Create a scalebar element.
+def createScalebar( id, label, idA, idB, distance, accuracy ):
+	bar = ET.Element("scalebar")
+	bar.attrib["id"]		= str(id)
+	bar.attrib["label"]		= str(label)
+	epA = ET.Element("endpoint")
+	epA.attrib["marker_id"]	= str(idA)
+	epB = ET.Element("endpoint")
+	epB.attrib["marker_id"]	= str(idB)
+	ref = ET.Element("reference")
+	ref.attrib["d"]			= str(distance)
+	ref.attrib["accuracy"]	= str(accuracy)
+	ref.attrib["enabled"]	= "true"
+	bar.append(epA)
+	bar.append(epB)
+	bar.append(ref)
+	return bar
+
+
+#*** Performs pairwise scalebar creation
 def pairwise():
-	print( "" )
-	print( "How far apart are the targets in each pair?" )
-	distance = input( "Distance (meters): " )
-	print( "" )
-	print( "How accurate is that measurement?" )
-	accuracy = input( "Accuracy (meters): " )
-	print( "" )
-	print( "Creating scalebars from pairs of targets..." )
-	print( "" )
+	distance = verboseInput( "How far apart are the targets in each pair?"	, "Distance (meters): " )
+	accuracy = verboseInput( "How accurate is that measurement?"			, "Accuracy (meters): " )
+	
+	padPrint( "Creating scalebars from pairs of targets..." )
+	
 	nodes = PyFolder(path, interpret=False, auto_create_folder=False)
 	chunks = nodes.index("chunk.zip")
+	
 	for chunk in chunks:
-		print( "Found chunk: " + chunk )
 		
-		print( "Opening chunk..." )
-		zip = PyZip().from_file( chunk )
-		
-		print( "	Parsing chunk..." )
-		tree = ET.ElementTree(    ET.fromstring(  zip["doc.xml"]  )    )
-		root = tree.getroot()
+		print( "Parsing chunk..." )
+		zip		= PyZip().from_file( chunk )
+		tree	= ET.ElementTree(    ET.fromstring(  zip["doc.xml"]  )    )
+		root	= tree.getroot()
 		
 		print( "	Finding markers node..." )
-		markers = ""
-		for node in root:
-			if node.tag == "markers" :
-				print( "		" + str(node) )
-				markers = node
+		markers		= findNode( root, "markers" )
 		
 		print( "	Finding scalebars node..." )
-		scalebars = ""
-		for node in root:
-			if node.tag == "scalebars" :
-				print( "		" + str(node) )
-				scalebars = node
-		if scalebars == "":
+		scalebars	= findNode( root, "scalebars" )
+		if not scalebars:
 			scalebars = ET.Element("scalebars")
 			scalebars.attrib["next_id"] = "0"
 			root.append( scalebars )
@@ -57,6 +89,7 @@ def pairwise():
 		print( "	Adding scalebars..." )
 		for node in markers:
 			labelA	= str( node.attrib["label"] )
+			print( str( node.attrib["label"] ) )
 			numA	= int( labelA.split()[1] )
 			if numA % 2 == 1:
 				numB = numA + 1
@@ -72,33 +105,14 @@ def pairwise():
 					id = id + 1
 					scalebars.attrib["next_id"] = str( id+1 )
 					idB = partner.attrib["id"]
-					bar = ET.Element("scalebar")
-					bar.attrib["id"]		= str(id)
-					bar.attrib["label"]		= str(labelA + "_" + labelB)
-					epA = ET.Element("endpoint")
-					epA.attrib["marker_id"]	= str(idA)
-					epB = ET.Element("endpoint")
-					epB.attrib["marker_id"]	= str(idB)
-					ref = ET.Element("reference")
-					ref.attrib["d"]			= str(distance)
-					ref.attrib["accuracy"]	= str(accuracy)
-					ref.attrib["enabled"]	= "true"
-					bar.append(epA)
-					bar.append(epB)
-					bar.append(ref)
+					bar = createScalebar( id, (labelA + "_" + labelB), idA, idB, distance, accuracy )
 					scalebars.append(bar)
-					print( "" )
-					print( ET.tostring(bar) )
-					print( "" )
+					padPrint( ET.tostring(bar) )
 		
-		print ( "" )
-		print ( "Writing to chunk file..." )
-		print ( "" )
+		padPrint ( "Writing to chunk file..." )
 		
 		xmlString = ET.tostring(root)
-		print ( "" )
-		print( xmlString )
-		print ( "" )
+		padPrint( xmlString )
 		
 		zip["doc.xml"] = xmlString
 		zip.save(chunk)
@@ -146,20 +160,29 @@ while action == "":
 	action = input( "Selection: " )
 
 if action == "c":
-	print( "" )
-	print( "Exiting..." )
+	padPrint( "Exiting..." )
 	sys.exit()
 	print( "" )
 if action == "a":
-	print( "" )
 	pairwise()
-	print( "" )
 if action == "c":
-	print( "" )
-	print( "We've got a wise-guy over here." )
-	print( "" )
+	padPrint( "We've got a wise-guy over here." )
 
 
-
-#pyzip = PyZip(PyFolder(path_to_compress, interpret=False))
-#pyzip.save("compressed_folder.zip")
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
