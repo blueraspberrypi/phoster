@@ -1,21 +1,21 @@
 # phoster
-Scalebar utility for Agisoft Photoscan
+## Scalebar utility for Agisoft Photoscan
 
 
 
-Background:
+## Background:
 
 Agisoft Photoscan allows the use of coded targets, which are detected automatically with high accuracy. Any two targets can be used to create a scalebar, which stores the distance between the two targets. Scalebars allow scans to conform to the real-world dimensions of the scanned object, and may improve scan accuracy.
 
 
 
-Phoster:
+##Phoster:
 
 Creating large numbers of scalebars in Photoscan is labor-intensive. This utility can be used to add a large number of scalebars to a Photoscan project, instantly, making scalebars much more convenient. Scalebars can be created automatically if each of the scalebars have identical lengths. If there are scalebars of different lengths, a profile can be created for the set of scalebars that will allow the set to be added to projects by specifying the file containing the profile.
 
 
 
-Usage Example - Profile-Based Scalebars:
+##Usage Example - Profile-Based Scalebars:
 
 1. Print some scalebars, then measure each scalebar. The scalebars can be different sizes.
 
@@ -40,7 +40,7 @@ phoster.exe C:\path\to\project\project.files
 
 
 
-Usage Example - Pairwise Scalebars:
+##Usage Example - Pairwise Scalebars:
 
 If you don't want to create a JSON file by hand, pairwise scalebar creation may be easier.
 
@@ -69,7 +69,7 @@ You should now see 50 scalebars in your project. They'll all have the same dista
 
 
 
-Installation:
+##Installation:
 
 Easy: Download the ZIP in the dist folder, extract the ZIP, and run the .exe in the extracted folder.
 
@@ -85,16 +85,16 @@ I've only tested the .py version in Windows, but as far as I know it should run 
 
 
 
-Future plans:
+##Future plans:
 
 None. Profiles were once the future goal. They were easy. I can't think of anything else I want it to do.
 
 
 
-JSON Formatting:
+##JSON Formatting:
 
 The JSON format is pretty simple. The progile below describes two scalebars, "My One Meter Scalebar" and "My Two Meter Scalebar". The "start" line and "end" line should be the names of the two targets that compose the scalebar. The distance is the distance between the two targets in meters, and the accuracy is the accuracy of that distance measurement in meters. The name can be anything, but should be unqiue. To add more scalebars, just copy the last scalebar (including the curly-braces and the comma that preceeds it), paste a new copy right after the closing curly brace of the last scalebar (after the closing curly brace, but before the closing square brace), then update the information in the new block to describe the scalebar you're adding.
-{
+`{
 	"scalebars":[
 		{
 			"name":"My One Meter Bar",
@@ -111,10 +111,10 @@ The JSON format is pretty simple. The progile below describes two scalebars, "My
 			"accuracy":"0.01"
 		}
 	]
-}
+}`
 
 
 
-Warnings:
+##Warnings:
 
 This program modifies your project file. It was written hastily for personal use, and is designed to be run on a brand new project right after marker detection. Don't run it on a project with data you don't want to lose.
