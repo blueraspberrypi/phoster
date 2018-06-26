@@ -1,0 +1,25 @@
+{
+	"scalebars":[
+		{
+			"name":"My One Meter Bar",
+			"start":"target 1",
+			"end":"target 3",
+			"distance":"1.0",
+			"accuracy":"0.01"
+		},
+		{
+			"name":"My Three Meter Bar",
+			"start":"target 7",
+			"end":"target 9",
+			"distance":"3.0",
+			"accuracy":"0.01"
+		},
+		{
+			"name":"My Two Meter Bar",
+			"start":"target 2",
+			"end":"target 4",
+			"distance":"2.0",
+			"accuracy":"0.01"
+		}
+	]
+}
