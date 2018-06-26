@@ -2,6 +2,7 @@ from pyzip import PyZip
 from pyfolder import PyFolder
 import xml.etree.ElementTree as ET
 import sys
+import json
 
 # **********************************************************
 # Dumb utilities for my weird output formatting preferences.
@@ -57,6 +58,67 @@ def createScalebar( id, label, idA, idB, distance, accuracy ):
 	bar.append(ref)
 	return bar
 
+#*** Performs profile-based scalebar creation
+def profile():
+	proFile = verboseInput("Drag and drop (or type the path to) the profile" , "Profile: ")
+	with open(proFile) as json_file:
+		data = ""
+		try:
+			data = json.load(json_file)
+		except ValueError:
+			print( "" )
+			print( "This file does not appear to contain valid JSON." )
+			print( "Exiting." )
+			print( "" )
+			sys.exit()
+		
+		padPrint( "Iterating chunks..." )
+		
+		nodes = PyFolder(path, interpret=False, auto_create_folder=False)
+		chunks = nodes.index("chunk.zip")
+		
+		for chunk in chunks:
+			
+			print( "Parsing chunk..." )
+			zip		= PyZip().from_file( chunk )
+			tree	= ET.ElementTree(    ET.fromstring(  zip["doc.xml"]  )    )
+			root	= tree.getroot()
+			
+			print( "	Finding markers node..." )
+			markers		= findNode( root, "markers" )
+			
+			print( "	Finding scalebars node..." )
+			scalebars	= findNode( root, "scalebars" )
+			if not scalebars:
+				scalebars = ET.Element("scalebars")
+				scalebars.attrib["next_id"] = "0"
+				root.append( scalebars )
+			
+			id = -1
+			
+			for scalebar in data["scalebars"]:
+				name		= scalebar["name"		]
+				start		= scalebar["start"		]
+				end			= scalebar["end"		]
+				distance	= scalebar["distance"	]
+				accuracy	= scalebar["accuracy"	]
+			
+				print( "		Creating scalebar: " + name )
+				
+				id = id + 1
+				scalebars.attrib["next_id"] = str( id+1 )
+				bar = createScalebar( id, name, start, end, distance, accuracy )
+				scalebars.append(bar)
+				padPrint( ET.tostring(bar) )
+			
+			padPrint ( "Writing to chunk file..." )
+			
+			xmlString = ET.tostring(root)
+			padPrint( xmlString )
+			
+			zip["doc.xml"] = xmlString
+			zip.save(chunk)
+	
 
 #*** Performs pairwise scalebar creation
 def pairwise():
@@ -165,8 +227,8 @@ if action == "c":
 	print( "" )
 if action == "a":
 	pairwise()
-if action == "c":
-	padPrint( "We've got a wise-guy over here." )
+if action == "b":
+	profile()
 
 
 	
