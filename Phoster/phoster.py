@@ -102,14 +102,31 @@ def profile():
 				end			= scalebar["end"		]
 				distance	= scalebar["distance"	]
 				accuracy	= scalebar["accuracy"	]
-			
-				print( "		Creating scalebar: " + name )
 				
-				id = id + 1
-				scalebars.attrib["next_id"] = str( id+1 )
-				bar = createScalebar( id, name, start, end, distance, accuracy )
-				scalebars.append(bar)
-				padPrint( ET.tostring(bar) )
+				print( "		Looking for target: " + start )
+				targetA = findChild( markers, start )
+				if targetA[0]:
+					targetA = targetA[1]
+				
+					print( "		Looking for target: " + end )
+					targetB = findChild( markers, end )
+					if targetB[0]:
+						targetB = targetB[1]
+						
+						print( "			Creating scalebar: " + name )
+						
+						idA = targetA.attrib["id"]
+						idB = targetB.attrib["id"]
+						
+						id = id + 1
+						scalebars.attrib["next_id"] = str( id+1 )
+						bar = createScalebar( id, name, idA, idB, distance, accuracy )
+						scalebars.append(bar)
+						padPrint( ET.tostring(bar) )
+					else:
+						padPrint( "			Ending target not found. Skipping scalebar." )
+				else:
+					padPrint( "			Starting target not found. Skipping scalebar." )
 			
 			padPrint ( "Writing to chunk file..." )
 			
